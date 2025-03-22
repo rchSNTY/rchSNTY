@@ -1,0 +1,83 @@
+import React from 'react';
+import { View, Text, TextInput, ScrollView, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { NavigationContainer } from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+
+function HomeScreen() {
+    const healthyFoods = [
+        { name: 'Fruits', image: require('./assets/fruits.jpg') },
+        { name: 'Tomato egg', image: require('./assets/tomato_egg.jpg') },
+        { name: 'Egg Sandwich', image: require('./assets/egg_sandwich.jpg') },
+        { name: 'Kare-kare', image: require('./assets/kare_kare.jpg') },
+        { name: 'Sinigang', image: require('./assets/sinigang.jpg') },
+        { name: 'Munggo', image: require('./assets/munggo.jpg') },
+    ];
+
+    const exercises = [
+        { name: 'Planking', image: require('./assets/planking.jpg') },
+        { name: 'Jogging', image: require('./assets/jogging.jpg') },
+        { name: 'Push up', image: require('./assets/push_up.jpg') },
+    ];
+
+    return (
+        <ScrollView style={styles.container}>
+            <TextInput placeholder="Search here" style={styles.searchBar} />
+
+            <Section title="Healthy Foods" data={healthyFoods} />
+            <Section title="Exercises" data={exercises} />
+        </ScrollView>
+    );
+}
+
+function Section({ title, data }) {
+    return (
+        <View style={styles.sectionContainer}>
+            <Text style={styles.sectionTitle}>{title}</Text>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                {data.map((item, index) => (
+                    <View key={index} style={styles.card}>
+                        <Image source={item.image} style={styles.image} />
+                        <Text style={styles.cardText}>{item.name}</Text>
+                    </View>
+                ))}
+            </ScrollView>
+        </View>
+    );
+}
+
+const Tab = createBottomTabNavigator();
+
+export default function App() {
+    return (
+        <NavigationContainer>
+            <Tab.Navigator>
+                <Tab.Screen name="Home" component={HomeScreen} options={{
+                    tabBarIcon: ({ color, size }) => <Icon name="home" color={color} size={size} />
+                }} />
+                <Tab.Screen name="Favorites" component={HomeScreen} options={{
+                    tabBarIcon: ({ color, size }) => <Icon name="favorite" color={color} size={size} />
+                }} />
+                <Tab.Screen name="Meal Plan" component={HomeScreen} options={{
+                    tabBarIcon: ({ color, size }) => <Icon name="restaurant" color={color} size={size} />
+                }} />
+                <Tab.Screen name="Tracker" component={HomeScreen} options={{
+                    tabBarIcon: ({ color, size }) => <Icon name="fitness-center" color={color} size={size} />
+                }} />
+                <Tab.Screen name="Profile" component={HomeScreen} options={{
+                    tabBarIcon: ({ color, size }) => <Icon name="person" color={color} size={size} />
+                }} />
+            </Tab.Navigator>
+        </NavigationContainer>
+    );
+}
+
+const styles = StyleSheet.create({
+    container: { padding: 15 },
+    searchBar: { borderRadius: 20, backgroundColor: '#f1f1f1', padding: 10, marginBottom: 15 },
+    sectionContainer: { marginBottom: 20 },
+    sectionTitle: { fontSize: 18, fontWeight: 'bold', marginBottom: 10 },
+    card: { width: 100, marginRight: 10, alignItems: 'center' },
+    image: { width: 80, height: 80, borderRadius: 10 },
+    cardText: { marginTop: 5, fontSize: 14 },
+});
