@@ -1,0 +1,112 @@
+import React from 'react';
+import { View, Text, TextInput, Image, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { NavigationContainer } from '@react-navigation/native';
+import { FontAwesome } from '@expo/vector-icons';
+
+const healthyFoods = [
+  { id: '1', name: 'Fruits', image: require('./assets/fruits.jpg') },
+  { id: '2', name: 'Egg Sandwich', image: require('./assets/egg_sandwich.jpg') },
+  { id: '3', name: 'Salad', image: require('./assets/salad.jpg') },
+];
+
+const exercises = [
+  { id: '1', name: 'Planking', image: require('./assets/planking.jpg') },
+  { id: '2', name: 'Jogging', image: require('./assets/jogging.jpg') },
+  { id: '3', name: 'Squats', image: require('./assets/squats.jpg') },
+];
+
+const HomeScreen = ({ navigation }) => (
+  <View style={styles.container}>
+    <Text style={styles.title}>Welcome, User!</Text>
+    <TextInput style={styles.search} placeholder="Search here..." />
+    <Text style={styles.subtitle}>Healthy Foods</Text>
+    <FlatList
+      horizontal
+      data={healthyFoods}
+      renderItem={({ item }) => (
+        <View style={styles.item}>
+          <Image source={item.image} style={styles.image} />
+          <Text>{item.name}</Text>
+        </View>
+      )}
+      keyExtractor={item => item.id}
+    />
+    <TouchableOpacity onPress={() => navigation.navigate('Food')}> 
+      <Text style={styles.moreButton}>More</Text>
+    </TouchableOpacity>
+    <Text style={styles.subtitle}>Exercises</Text>
+    <FlatList
+      horizontal
+      data={exercises}
+      renderItem={({ item }) => (
+        <View style={styles.item}>
+          <Image source={item.image} style={styles.image} />
+          <Text>{item.name}</Text>
+        </View>
+      )}
+      keyExtractor={item => item.id}
+    />
+    <TouchableOpacity onPress={() => navigation.navigate('Exercise')}> 
+      <Text style={styles.moreButton}>More</Text>
+    </TouchableOpacity>
+  </View>
+);
+
+const FoodScreen = () => (
+  <View style={styles.container}>
+    <Text style={styles.title}>Food Suggestions</Text>
+    <TextInput style={styles.search} placeholder="Search here..." />
+    <FlatList
+      data={healthyFoods}
+      renderItem={({ item }) => (
+        <View style={styles.item}>
+          <Image source={item.image} style={styles.image} />
+          <Text>{item.name}</Text>
+        </View>
+      )}
+      keyExtractor={item => item.id}
+    />
+  </View>
+);
+
+const ExerciseScreen = () => (
+  <View style={styles.container}>
+    <Text style={styles.title}>Exercise Suggestions</Text>
+    <TextInput style={styles.search} placeholder="Search here..." />
+    <FlatList
+      data={exercises}
+      renderItem={({ item }) => (
+        <View style={styles.item}>
+          <Image source={item.image} style={styles.image} />
+          <Text>{item.name}</Text>
+        </View>
+      )}
+      keyExtractor={item => item.id}
+    />
+  </View>
+);
+
+const Tab = createBottomTabNavigator();
+
+export default function MobileApp() {
+  return (
+    <NavigationContainer>
+      <Tab.Navigator>
+        <Tab.Screen name="Home" component={HomeScreen} options={{ tabBarIcon: () => <FontAwesome name="home" size={24} /> }} />
+        <Tab.Screen name="Food" component={FoodScreen} options={{ tabBarIcon: () => <FontAwesome name="cutlery" size={24} /> }} />
+        <Tab.Screen name="Exercise" component={ExerciseScreen} options={{ tabBarIcon: () => <FontAwesome name="bicycle" size={24} /> }} />
+      </Tab.Navigator>
+    </NavigationContainer>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, padding: 20, backgroundColor: '#f0f0f0' },
+  title: { fontSize: 24, fontWeight: 'bold', marginBottom: 10 },
+  subtitle: { fontSize: 18, fontWeight: 'bold', marginTop: 20 },
+  search: { borderWidth: 1, padding: 10, marginBottom: 10, borderRadius: 5 },
+  item: { marginRight: 10, alignItems: 'center' },
+  image: { width: 80, height: 80, borderRadius: 10 },
+  moreButton: { color: 'blue', marginTop: 10, fontSize: 16 },
+});
